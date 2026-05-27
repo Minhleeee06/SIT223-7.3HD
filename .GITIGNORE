@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+coverage.lcov
+trivy-report.txt
+monitoring-logs.txt
+.env
