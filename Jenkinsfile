@@ -20,7 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running tests for version ${APP_VERSION}"
-                sh 'pytest tests'
+                sh 'python3 -m pytest'
             }
         }
 
