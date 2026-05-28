@@ -25,19 +25,30 @@ pipeline {
         // STAGE 3
         stage('Code Quality') {
             steps {
-                echo 'Running SonarQube analysis'
-                sh '''
-            export SONAR_HOST_URL=http://localhost:9000
-            export SONAR_TOKEN=your-token-here
-            sonar-scanner \
-                -Dsonar.projectKey=cybersec-api-python \
-                -Dsonar.sources=. \
-                -Dsonar.inclusions=App.py \
-                -Dsonar.host.url=http://localhost:9000 \
-                -Dsonar.login=$SONAR_TOKEN
-        '''
+                echo 'Running code quality analysis with pylint...'
+        sh 'pip install pylint'
+        sh 'pylint App.py --exit-zero --output-format=text | tee pylint-report.txt'
+        sh 'cat pylint-report.txt'
             }
         }
-        
+
+        // STAGE 4
+          stage('Security') {
+            steps {
+                echo 'Scanning image with Trivy...'
+                sh """
+                    docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v trivy-cache:/root/.cache/ \
+                        aquasec/trivy:latest image \
+                        --exit-code 0 \
+                        --severity HIGH,CRITICAL \
+                        --format table \
+                        --output trivy-report.txt \
+                        ${IMAGE_NAME}:${APP_VERSION}
+                """
+                sh 'cat trivy-report.txt'
+            }
+          }
     }
 }
