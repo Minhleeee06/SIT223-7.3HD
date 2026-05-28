@@ -22,12 +22,5 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                echo "Building Docker image ${IMAGE_NAME}:${APP_VERSION}"
-                sh "docker build -t ${IMAGE_NAME}:${APP_VERSION} ."
-            }
-        }
-
 
 }
