@@ -46,7 +46,17 @@ pipeline {
                         --format table \
                         ${IMAGE_NAME}:${APP_VERSION} | tee trivy-report.txt
                 """
-            }
+             }
           }
+
+          //STAGE 5
+          steps {
+                echo "Deploying to staging..."
+                sh "docker compose -f Docker_compose.YML down || true"
+                sh "APP_VERSION=${APP_VERSION} docker compose -f Docker_compose.YML up -d"
+                sh 'sleep 10'
+                sh "curl -s http://localhost:3000/health"
+            }
+        }
     }
 }
