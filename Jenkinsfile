@@ -59,5 +59,15 @@ pipeline {
                 sh "curl -s http://localhost:3000/health"
             }
         }
+
+          //STAGE 6
+          stage('Release') {
+          steps {
+              sh "docker tag ${IMAGE_NAME}:${APP_VERSION} ${IMAGE_NAME}:release-${APP_VERSION}"
+              echo "Released version ${APP_VERSION}"
+            }
+        }
+
+        
     }
 }
