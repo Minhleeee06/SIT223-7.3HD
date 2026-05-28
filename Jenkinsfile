@@ -2,7 +2,7 @@ pipeline {
     agent any
  
     environment {
-        IMAGE_NAME  = 'cybersec-api'
+        IMAGE_NAME  = "cybersec-api"
         APP_VERSION = "1.0.${BUILD_NUMBER}"
     }
       stages {
@@ -19,13 +19,13 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running tests for version ${APP_VERSION}"
-                sh 'python3 -m pytest'
+                sh "python3 -m pytest"
             }
         }
         // STAGE 3
         stage('Code Quality') {
             steps {
-                echo 'Running code quality analysis with pylint...'
+                echo "Running code quality analysis with pylint"
         sh 'pip install pylint'
         sh 'pylint App.py --exit-zero --output-format=text | tee pylint-report.txt'
         sh 'cat pylint-report.txt'
@@ -44,10 +44,8 @@ pipeline {
                         --exit-code 0 \
                         --severity HIGH,CRITICAL \
                         --format table \
-                        --output trivy-report.txt \
-                        ${IMAGE_NAME}:${APP_VERSION}
+                        ${IMAGE_NAME}:${APP_VERSION} | tee trivy-report.txt
                 """
-                sh 'cat trivy-report.txt'
             }
           }
     }
