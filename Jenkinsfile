@@ -91,4 +91,13 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            echo "Pipeline SUCCESS — ${IMAGE_NAME} v${APP_VERSION} deployed"
+        }
+        failure {
+            echo "Pipeline FAILED — check the stage logs above"
+        }
+    }
 }
