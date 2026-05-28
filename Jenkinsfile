@@ -50,6 +50,7 @@ pipeline {
           }
 
           //STAGE 5
+          stage('Deploy') {
           steps {
                 echo "Deploying to staging..."
                 sh "docker compose -f Docker_compose.YML down || true"
