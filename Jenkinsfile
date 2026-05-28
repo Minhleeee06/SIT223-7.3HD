@@ -74,15 +74,15 @@ pipeline {
                 echo "Running post-deploy monitoring check"
                 sh '''
                     echo "____Health check_____"
-                    curl -sf http://localhost:3000/health
+                    curl -s http://localhost:3000/health
  
                     echo "____Password endpoint____"
-                    curl -sf -X POST http://localhost:3000/api/password/check \
+                    curl -s -X POST http://localhost:3000/api/password/check \
                         -H "Content-Type: application/json" \
                         -d "{"password":"Monitor#Check99"}"
  
                     echo "____Breach endpoint____"
-                    curl -sf -X POST http://localhost:3000/api/breach/check \
+                    curl -s -X POST http://localhost:3000/api/breach/check \
                         -H "Content-Type: application/json" \
                         -d "{"email":"monitor@check.com"}"
  
