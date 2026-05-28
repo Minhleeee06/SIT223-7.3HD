@@ -11,7 +11,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building version ${APP_VERSION}"
-                sh 'pip install -r requirement.txt'
+                sh "pip install -r requirement.txt"
+                sh "docker build -t ${IMAGE_NAME}:${APP_VERSION} -t ${IMAGE_NAME}:latest ."
+                echo "Image ${IMAGE_NAME}:${APP_VERSION} built successfully"
             }
         }
 
@@ -21,5 +23,7 @@ pipeline {
                 sh 'pytest tests/'
             }
         }
+
+        
     }
 }
