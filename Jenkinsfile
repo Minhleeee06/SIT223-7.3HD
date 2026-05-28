@@ -26,12 +26,16 @@ pipeline {
         stage('Code Quality') {
             steps {
                 echo 'Running SonarQube analysis'
-                withSonarQubeEnv('SonarQube') {
-                    sh 'sonar-scanner -Dproject.settings=SONAR.PROPERTIES'
-                }
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
+                sh '''
+            export SONAR_HOST_URL=http://localhost:9000
+            export SONAR_TOKEN=your-token-here
+            sonar-scanner \
+                -Dsonar.projectKey=cybersec-api-python \
+                -Dsonar.sources=. \
+                -Dsonar.inclusions=App.py \
+                -Dsonar.host.url=http://localhost:9000 \
+                -Dsonar.login=$SONAR_TOKEN
+        '''
             }
         }
         
